@@ -1,0 +1,35 @@
+= API Documentation
+
+== List all Students
+
+=== Request
+include::{snippets}/list-students/http-request.adoc[]
+
+=== Response
+include::{snippets}/list-students/http-response.adoc[]
+
+==== Response body
+The Response is a list wrapped inside an object:
+include::{snippets}/list-students/response-body.adoc[]
+
+=== Response body fields
+include::{snippets}/list-students/response-fields-beneath-list.[0].adoc
+
+== Create new Student
+
+=== Request
+
+== List all courses
+
+=== Request
+include::{snippets}/list-courses/http-request.adoc[]
+
+=== Response
+include::{snippets}/list-courses/http-response.adoc[]
+
+==== Response body
+The Response is a list wrapped inside an object:
+include::{snippets}/list-courses/response-body.adoc[]
+
+=== Response body fields
+include::{snippets}/list-courses/response-fields-beneath-list.[0].adoc
