@@ -30,7 +30,8 @@ class CourseService @Autowired constructor(
             return courseRepository.insert(course)
         } catch (e: DuplicateKeyException) {
             throw CourseAlreadyExistsException(
-                "Course with id [${course.id}] or description [${course.description}] already exists")
+                "Course with id [${course.id}] or description [${course.description}] already exists"
+            )
         } catch (e: javax.validation.ConstraintViolationException) {
             throw InvalidDataException("Data violates constraints: " + e.message)
         }
@@ -62,12 +63,15 @@ class CourseService @Autowired constructor(
     fun updateStudent(course: Course) {
         for (student in course.students) {
             if (!student.courses.contains(course)) {
-                studentRepository.save(Student(
-                    student.id,
-                    student.firstName,
-                    student.lastName,
-                    student.email,
-                    student.courses.toMutableList().apply { this.add(course) }.toList()))
+                studentRepository.save(
+                    Student(
+                        student.id,
+                        student.firstName,
+                        student.lastName,
+                        student.email,
+                        student.courses.toMutableList().apply { this.add(course) }.toList()
+                    )
+                )
             }
         }
     }

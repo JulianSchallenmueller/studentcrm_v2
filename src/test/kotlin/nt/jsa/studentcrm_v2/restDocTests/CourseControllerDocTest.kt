@@ -32,7 +32,7 @@ class CourseControllerDocTest @Autowired constructor(
     val studentRepository: StudentRepository,
     val courseRepository: CourseRepository,
     val studentService: StudentService,
-){
+) {
     @LocalServerPort
     private val port: Int = 0
 
@@ -72,7 +72,8 @@ class CourseControllerDocTest @Autowired constructor(
                 "Changed",
                 "Also-changed",
                 student1.email,
-                student1.courses.toMutableList().apply { this.add(course1) }.toList())
+                student1.courses.toMutableList().apply { this.add(course1) }.toList()
+            )
         )
     }
 
@@ -80,9 +81,10 @@ class CourseControllerDocTest @Autowired constructor(
     fun listCourses(@Autowired documentationSpec: RequestSpecification?, @LocalServerPort port: Int) {
         RestAssured.given(documentationSpec)
             .filter(
-                RestAssuredRestDocumentation.document("list-courses",
+                RestAssuredRestDocumentation.document(
+                    "list-courses",
                     PayloadDocumentation.responseFields(
-                        beneathPath("list.[0]"),
+                        beneathPath("courses.[0]"),
                         fieldWithPath("id").description("Course id"),
                         fieldWithPath("description").description("Description of the courses content"),
                         fieldWithPath("students").description("List of students enrolled"),
@@ -90,11 +92,13 @@ class CourseControllerDocTest @Autowired constructor(
                         fieldWithPath("students.[0].firstName").ignored(),
                         fieldWithPath("students.[0].lastName").ignored(),
                         fieldWithPath("students.[0].email").ignored()
-                    )))
+                    )
+                )
+            )
             .`when`()
             .port(port)["/v1/courses"]
             .then().assertThat()
             .statusCode(Matchers.`is`(200))
-            .body("list.size", Matchers.equalTo(2))
+            .body("courses.size", Matchers.equalTo(2))
     }
 }

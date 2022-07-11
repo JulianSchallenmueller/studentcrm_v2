@@ -1,6 +1,5 @@
 package nt.jsa.studentcrm_v2.restDocTests
 
-import com.fasterxml.jackson.module.kotlin.jsonMapper
 import io.restassured.RestAssured
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
@@ -10,20 +9,18 @@ import nt.jsa.studentcrm_v2.model.Student
 import nt.jsa.studentcrm_v2.repository.CourseRepository
 import nt.jsa.studentcrm_v2.repository.StudentRepository
 import nt.jsa.studentcrm_v2.service.StudentService
+import org.apache.http.HttpStatus
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
-import org.json.JSONObject
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.json.GsonJsonParser
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.restdocs.payload.PayloadDocumentation.*
-import org.springframework.restdocs.request.RequestDocumentation.*
 import org.springframework.restdocs.restassured3.RestAssuredRestDocumentation
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -37,7 +34,7 @@ class StudentControllerDocTest @Autowired constructor(
     val studentRepository: StudentRepository,
     val courseRepository: CourseRepository,
     val studentService: StudentService,
-){
+) {
     @LocalServerPort
     private val port: Int = 0
 
@@ -77,49 +74,60 @@ class StudentControllerDocTest @Autowired constructor(
                 "Changed",
                 "Also-changed",
                 student1.email,
-                student1.courses.toMutableList().apply { this.add(course1) }.toList()))
+                student1.courses.toMutableList().apply { this.add(course1) }.toList()
+            )
+        )
     }
 
     @Test
     fun listStudents(@Autowired documentationSpec: RequestSpecification?, @LocalServerPort port: Int) {
         RestAssured.given(documentationSpec)
-            .filter(RestAssuredRestDocumentation.document("list-students",
-            responseFields(beneathPath("list.[0]"),
-                fieldWithPath("id").description("Student Id"),
-                fieldWithPath("firstName").description("First name of student"),
-                fieldWithPath("lastName").description("Last name of student"),
-                fieldWithPath("email").description("Email of student")
-            )))
+            .filter(
+                RestAssuredRestDocumentation.document(
+                    "list-students",
+                    responseFields(
+                        fieldWithPath("students").description("List of Students"), // beneathPath("list.[0]"),
+                        fieldWithPath("students.[*].id").description("Student Id"),
+                        fieldWithPath("students.[*].firstName").description("First name of student"),
+                        fieldWithPath("students.[*].lastName").description("Last name of student"),
+                        fieldWithPath("students.[*].email").description("Email of student")
+                    )
+                )
+            )
             .`when`()
             .port(port)["/v1/students"]
             .then().assertThat()
             .statusCode(Matchers.`is`(200))
-            .body("list.size", equalTo(3))
+            .body("students.size", equalTo(3))
     }
 
-//    @Test
-//    fun createStudent(@Autowired documentationSpec: RequestSpecification?, @LocalServerPort port: Int) {
-//        val requestBody = "{" +
-//                "    \"id\": \"4\"," +
-//                "    \"firstName\": \"first\"," +
-//                "    \"lastName\": \"last\"," +
-//                "    \"email\":\"e4@mail\"," +
-//                "    \"courses\": []" +
-//                "}"
-//
-//        RestAssured.given(documentationSpec).accept(ContentType.JSON)
-//            .filter(RestAssuredRestDocumentation.document("create-student",
-//                requestFields(
-//                    fieldWithPath("id").description("Student Id").type(String::class),
-//                    fieldWithPath("firstName").description("First name").type(String::class),
-//                    fieldWithPath("lastName").description("last name").type(String::class),
-//                    fieldWithPath("email").description("Student email").type(String::class),
-//                    fieldWithPath("courses").description("Courses student is enrolled in").description(List::class),
-//                )))
-//            .body(requestBody)
-//            .`when`().port(port).post("/v1/students")
-//            .then().assertThat()
-//            .statusCode(Matchers.`is`(201))
-//            .header(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8")
-//    }
+    @Test
+    fun createStudent(@Autowired documentationSpec: RequestSpecification?, @LocalServerPort port: Int) {
+        val requestBody = "{" +
+            "    \"id\": \"4\"," +
+            "    \"firstName\": \"first\"," +
+            "    \"lastName\": \"last\"," +
+            "    \"email\":\"e4@mail\"," +
+            "    \"courses\": []" +
+            "}"
+
+        RestAssured.given(documentationSpec).accept(ContentType.JSON).contentType(ContentType.JSON)
+            .filter(
+                RestAssuredRestDocumentation.document(
+                    "create-student",
+                    requestFields(
+                        fieldWithPath("id").description("Student Id").type(String::class),
+                        fieldWithPath("firstName").description("First name").type(String::class),
+                        fieldWithPath("lastName").description("last name").type(String::class),
+                        fieldWithPath("email").description("Student email").type(String::class),
+                        fieldWithPath("courses").description("Courses student is enrolled in").description(List::class),
+                    )
+                )
+            )
+            .body(requestBody)
+            .`when`().port(port).post("/v1/students")
+            .then().assertThat()
+            .statusCode(HttpStatus.SC_CREATED)
+            .header(HttpHeaders.CONTENT_TYPE, "application/json")
+    }
 }

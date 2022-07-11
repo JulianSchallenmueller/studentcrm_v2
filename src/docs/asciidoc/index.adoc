@@ -13,7 +13,7 @@ The Response is a list wrapped inside an object:
 include::{snippets}/list-students/response-body.adoc[]
 
 === Response body fields
-include::{snippets}/list-students/response-fields-beneath-list.[0].adoc
+include::{snippets}/list-students/response-fields.adoc[]
 
 == Create new Student
 

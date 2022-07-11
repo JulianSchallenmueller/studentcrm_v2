@@ -1,20 +1,11 @@
 package nt.jsa.studentcrm_v2.controller
 
 import nt.jsa.studentcrm_v2.model.Course
-import nt.jsa.studentcrm_v2.repository.CourseRepository
 import nt.jsa.studentcrm_v2.service.CourseService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 @RestController
@@ -26,10 +17,15 @@ class CourseController @Autowired constructor(
     @GetMapping
     fun getAllCourses(): ResponseEntity<Any> {
         val courses = object {
-            val list = courseService.findAll()
+            val courses = courseService.findAll()
         }
 
         return ResponseEntity.ok(courses)
+    }
+
+    @GetMapping("/allCourses")
+    fun getAllCoursesNoObject(): ResponseEntity<List<Course>> {
+        return ResponseEntity.ok(courseService.findAll())
     }
 
     @GetMapping("/{id}")

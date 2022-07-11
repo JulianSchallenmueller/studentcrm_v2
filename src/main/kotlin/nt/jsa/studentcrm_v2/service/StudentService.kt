@@ -28,11 +28,13 @@ class StudentService @Autowired constructor(
     fun createStudent(student: Student): Student {
         try {
             if (studentRepository.existsByEmail(student.email)) throw StudentAlreadyExistsException(
-                "Student with email [${student.email}] already exists")
+                "Student with email [${student.email}] already exists"
+            )
             return studentRepository.insert(student)
         } catch (e: DuplicateKeyException) {
             throw StudentAlreadyExistsException(
-                "Student with id [${student.id}] or email [${student.email}] already exists")
+                "Student with id [${student.id}] or email [${student.email}] already exists"
+            )
         } catch (e: InvalidDataException) {
             throw Exception(e)
         }
@@ -62,11 +64,14 @@ class StudentService @Autowired constructor(
 
     fun updateCourses(student: Student) {
         for (course in student.courses) {
-            if(!course.students.contains(student)) {
-                courseRepository.save(Course(
-                    course.id,
-                    course.description,
-                    course.students.toMutableList().apply { this.add(student) }.toList()))
+            if (!course.students.contains(student)) {
+                courseRepository.save(
+                    Course(
+                        course.id,
+                        course.description,
+                        course.students.toMutableList().apply { this.add(student) }.toList()
+                    )
+                )
             }
         }
     }

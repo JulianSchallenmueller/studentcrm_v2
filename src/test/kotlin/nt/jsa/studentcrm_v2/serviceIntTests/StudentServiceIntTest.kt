@@ -106,7 +106,9 @@ class StudentServiceIntTest @Autowired constructor(
                 "firstName42",
                 "lastName42",
                 "firstNameLastName1@email.com",
-                listOf()))
+                listOf()
+            )
+        )
 
         assert(createdStudent == studentService.findById(createdStudent.id))
     }

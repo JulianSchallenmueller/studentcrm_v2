@@ -68,7 +68,7 @@ class CourseControllerIntTest @Autowired constructor(
             get("http://localhost:$port/v1/courses")
         } Then {
             statusCode(HttpStatus.SC_OK)
-            body("list.size", equalTo(2))
+            body("courses.size", equalTo(2))
         }
     }
 
@@ -95,10 +95,10 @@ class CourseControllerIntTest @Autowired constructor(
     @Test
     fun `on post create course with status 201`() {
         val jsonString = "{" +
-                "    \"id\": \"3\"," +
-                "    \"description\": \"descr 3\"," +
-                "    \"students\": []" +
-                "}"
+            "    \"id\": \"3\"," +
+            "    \"description\": \"descr 3\"," +
+            "    \"students\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)
@@ -114,10 +114,10 @@ class CourseControllerIntTest @Autowired constructor(
     @Test
     fun `should reject post with status 409`() {
         val jsonString = "{" +
-                "    \"id\": \"2\"," +
-                "    \"description\": \"descr 3\"," +
-                "    \"students\": []" +
-                "}"
+            "    \"id\": \"2\"," +
+            "    \"description\": \"descr 3\"," +
+            "    \"students\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)
@@ -132,10 +132,10 @@ class CourseControllerIntTest @Autowired constructor(
     @Test
     fun `should reject post with status 400`() {
         val jsonString = "{" +
-                "    \"id\": \"5\"," +
-                "    \"description\": \"descr 3fdsfdsfdsfdsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"," +
-                "    \"students\": []" +
-                "}"
+            "    \"id\": \"5\"," +
+            "    \"description\": \"descr 3fdsfdsfdsfdsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff\"," +
+            "    \"students\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)
@@ -150,10 +150,10 @@ class CourseControllerIntTest @Autowired constructor(
     @Test
     fun `should update course with status 200`() {
         val jsonString = "{" +
-                "    \"id\": \"1\"," +
-                "    \"description\": \"something different\"," +
-                "    \"students\": []" +
-                "}"
+            "    \"id\": \"1\"," +
+            "    \"description\": \"something different\"," +
+            "    \"students\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)

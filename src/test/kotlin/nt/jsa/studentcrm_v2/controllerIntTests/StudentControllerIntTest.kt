@@ -10,9 +10,7 @@ import nt.jsa.studentcrm_v2.model.Student
 import nt.jsa.studentcrm_v2.repository.CourseRepository
 import nt.jsa.studentcrm_v2.repository.StudentRepository
 import nt.jsa.studentcrm_v2.service.StudentService
-import nt.jsa.studentcrm_v2.serviceIntTests.StudentServiceIntTest
 import org.apache.http.HttpStatus
-import org.bson.types.ObjectId
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -73,7 +71,7 @@ class StudentControllerIntTest @Autowired constructor(
             get("http://localhost:$port/v1/students")
         } Then {
             statusCode(HttpStatus.SC_OK)
-            body("list.size", equalTo(3))
+            body("students.size", equalTo(3))
         }
     }
 
@@ -100,12 +98,12 @@ class StudentControllerIntTest @Autowired constructor(
     @Test
     fun `on post create student with status 201`() {
         val jsonString = "{" +
-                "    \"id\": \"4\"," +
-                "    \"firstName\": \"first\"," +
-                "    \"lastName\": \"last\"," +
-                "    \"email\":\"e@mail\"," +
-                "    \"courses\": []" +
-                "}"
+            "    \"id\": \"4\"," +
+            "    \"firstName\": \"first\"," +
+            "    \"lastName\": \"last\"," +
+            "    \"email\":\"e@mail\"," +
+            "    \"courses\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)
@@ -126,12 +124,12 @@ class StudentControllerIntTest @Autowired constructor(
     @Test
     fun `should reject post with status 409`() {
         val jsonString = "{" +
-                "    \"id\": \"1\"," +
-                "    \"firstName\": \"first\"," +
-                "    \"lastName\": \"last\"," +
-                "    \"email\":\"e@mail\"," +
-                "    \"courses\": []" +
-                "}"
+            "    \"id\": \"1\"," +
+            "    \"firstName\": \"first\"," +
+            "    \"lastName\": \"last\"," +
+            "    \"email\":\"e@mail\"," +
+            "    \"courses\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)
@@ -148,12 +146,12 @@ class StudentControllerIntTest @Autowired constructor(
     @Test
     fun `should reject invalid data with status 400`() {
         val jsonString = "{" +
-                "    \"id\": \"4\"," +
-                "    \"firstName\": \"firstnamethatisverylonganddefinitelyinvalidbecauseofit\"," +
-                "    \"lastName\": \"last\"," +
-                "    \"email\":\"e@mail\"," +
-                "    \"courses\": []" +
-                "}"
+            "    \"id\": \"4\"," +
+            "    \"firstName\": \"firstnamethatisverylonganddefinitelyinvalidbecauseofit\"," +
+            "    \"lastName\": \"last\"," +
+            "    \"email\":\"e@mail\"," +
+            "    \"courses\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)
@@ -170,12 +168,12 @@ class StudentControllerIntTest @Autowired constructor(
     @Test
     fun `should update student with status 200`() {
         val jsonString = "{" +
-                "    \"id\": \"1\"," +
-                "    \"firstName\": \"some other name\"," +
-                "    \"lastName\": \"last\"," +
-                "    \"email\":\"firstlast1@email.com\"," +
-                "    \"courses\": []" +
-                "}"
+            "    \"id\": \"1\"," +
+            "    \"firstName\": \"some other name\"," +
+            "    \"lastName\": \"last\"," +
+            "    \"email\":\"firstlast1@email.com\"," +
+            "    \"courses\": []" +
+            "}"
 
         Given {
             contentType(ContentType.JSON)

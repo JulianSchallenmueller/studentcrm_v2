@@ -127,12 +127,15 @@ class CourseServiceIntTest @Autowired constructor(
     @Test
     fun `should reject course`() {
         createSampleCourses()
-        assertThrows<CourseAlreadyExistsException> { courseService.createCourse(
-            Course(
-                course1.id,
-                "some description",
-                listOf()
-        )) }
+        assertThrows<CourseAlreadyExistsException> {
+            courseService.createCourse(
+                Course(
+                    course1.id,
+                    "some description",
+                    listOf()
+                )
+            )
+        }
     }
 
     @Test

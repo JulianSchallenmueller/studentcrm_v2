@@ -1,7 +1,6 @@
 package nt.jsa.studentcrm_v2.controller
 
 import nt.jsa.studentcrm_v2.model.Student
-import nt.jsa.studentcrm_v2.repository.StudentRepository
 import nt.jsa.studentcrm_v2.service.StudentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -18,9 +17,15 @@ class StudentController @Autowired constructor(
     @GetMapping
     fun getAllStudents(): ResponseEntity<Any> {
         val students = object {
-            val list = studentService.findAll()
+            val students = studentService.findAll()
         }
 
+        return ResponseEntity.ok(students)
+    }
+
+    @GetMapping("/allStudents")
+    fun getAllStudentsNoObject(): ResponseEntity<List<Student>> {
+        val students = studentService.findAll()
         return ResponseEntity.ok(students)
     }
 
